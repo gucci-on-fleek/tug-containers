@@ -5,7 +5,7 @@ This user was created to host rootless Podman containers. The easiest
 way to see a list of the “important” files is to run
 
 ```console
-    $ git ls-files
+$ git ls-files
 ```
 
 Commands
@@ -16,41 +16,41 @@ Commands
 You _should_ be able to run
 
 ```console
-    $ sudo systemctl --user --machine=containers@ <command>
+$ sudo systemctl --user --machine=containers@ <command>
 ```
 
 as any (`wheel`ed) user to control the containers, but this doesn't work
 for some reason. Instead, you'll need to use the more cumbersome
 
 ```console
-    $ sudo -u containers sh -c "XDG_RUNTIME_DIR=/run/user/$(id -u) systemctl --user <command>"
+$ sudo -u containers sh -c "XDG_RUNTIME_DIR=/run/user/$(id -u) systemctl --user <command>"
 ```
 
 or log in as `containers` and run
 
 ```console
-    $ export XDG_RUNTIME_DIR=/run/user/$(id -u)
-    $ systemctl --user <command>
+$ export XDG_RUNTIME_DIR=/run/user/$(id -u)
+$ systemctl --user <command>
 ```
 
 ### Starting/stopping the container
 
 ```console
-    $ systemctl --user start viewvc.service
-    $ systemctl --user stop viewvc.service
+$ systemctl --user start viewvc.service
+$ systemctl --user stop viewvc.service
 ```
 
 ### Restarting the container
 
 ```console
-    $ systemctl --user daemon-reload  # To reload the unit file
-    $ systemctl --user restart viewvc.service
+$ systemctl --user daemon-reload  # To reload the unit file
+$ systemctl --user restart viewvc.service
 ```
 
 ### Committing updates to any files
 
 ```console
-    $ git add -A && git commit && git push
+$ git add -A && git commit && git push
 ```
 
 Files
