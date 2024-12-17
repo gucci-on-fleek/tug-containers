@@ -1,0 +1,47 @@
+{
+	log default {
+		output file /srv/data/caddy-log/main.log
+		format json
+	}
+
+	cache {
+		otter
+	}
+
+
+	order cache before rate_limit
+}
+
+:8080 {
+	log {
+		output file /srv/data/caddy-log/access.log
+		format json
+	}
+
+	encode zstd gzip
+
+	header Cache-Control max-age=86400 # 1 day
+	cache
+
+	rate_limit {
+		zone svn {
+			match {
+				not path /viewvc-docroot/*
+			}
+			key {remote_host}
+			events 10
+			window 60s
+		}
+	}
+
+	handle_errors {
+		respond "{err.status_code} {err.status_text}"
+	}
+
+	handle_path /viewvc-docroot/* {
+		file_server
+	}
+	root /usr/local/share/viewvc/docroot
+	
+	reverse_proxy :43219
+}
