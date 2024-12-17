@@ -33,6 +33,8 @@ $ export XDG_RUNTIME_DIR=/run/user/$(id -u)
 $ systemctl --user <command>
 ```
 
+(If you don't do this, you'll get a `Failed to connect to bus` error.)
+
 ### Starting/stopping the container
 
 ```console
