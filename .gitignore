@@ -1,0 +1,9 @@
+/*
+!/.config
+/.config/*
+!/.config/containers
+!/.config/systemd
+!/viewvc
+/viewvc/data
+!.gitignore
+!README.md

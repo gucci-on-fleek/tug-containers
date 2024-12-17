@@ -1,28 +1,40 @@
+# Global options
 {
+	# Redirect the server logs to a file
 	log default {
 		output file /srv/data/caddy-log/main.log
 		format json
 	}
 
+	# Enable caching
 	cache {
 		otter
 	}
 
-
+	# Allow cached responses to skip the rate limit
+	order rate_limit before header
 	order cache before rate_limit
+
+	# For the ACME certificate challenge
+	email acme-certificates@maxchernoff.ca
 }
 
+# The web server
 :8080 {
+	# Save the access logs to a file
 	log {
 		output file /srv/data/caddy-log/access.log
 		format json
 	}
 
+	# Enable gzip and zstd compression
 	encode zstd gzip
 
+	# Cache the responses for 1 day
 	header Cache-Control max-age=86400 # 1 day
 	cache
 
+	# Rate limit the requests to 10 per minute
 	rate_limit {
 		zone svn {
 			match {
@@ -34,14 +46,33 @@
 		}
 	}
 
+	# Give a friendly error message for rate-limited requests
+	handle_errors 429 {
+		respond `
+		<!DOCTYPE html>
+		<html lang="en">
+		<meta charset="UTF-8">
+		<title>Too Many Requests</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" >
+		<meta name="color-scheme" content="light dark">
+		<h1>Too Many Requests</h1>
+		<p>You can only make 10 requests per minute. Please wait a little bit
+		and try again.
+		<p><a href="https://tug.org">Return to the main site.</a>
+		` 429
+	}
+
+	# Just show a plain error message for other errors
 	handle_errors {
 		respond "{err.status_code} {err.status_text}"
 	}
 
+	# Handle the ViewVC static files
+	root /usr/local/share/viewvc/docroot
 	handle_path /viewvc-docroot/* {
 		file_server
 	}
-	root /usr/local/share/viewvc/docroot
-	
+
+	# Reverse proxy to the ViewVC server
 	reverse_proxy :43219
 }
