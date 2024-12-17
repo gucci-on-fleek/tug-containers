@@ -20,7 +20,7 @@
 }
 
 # The web server
-:8080 {
+https://svn.tug.org:8369 {
 	# Save the access logs to a file
 	log {
 		output file /srv/data/caddy-log/access.log

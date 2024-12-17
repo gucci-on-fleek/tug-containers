@@ -19,7 +19,7 @@ Volume=%h/viewvc/:/srv/:rw,U
 Volume=/home/svn/:/mnt/:ro
 
 # Expose the web server's port
-PublishPort=127.0.0.1:8080:8080
+PublishPort=8369:8369
 
 [Service]
 # Restart the container if it fails
@@ -31,8 +31,8 @@ CPUQuota=200%
 
 # Limit the maximum I/O bandwidth to 25% of the server's capabilities
 IOAccounting=yes
-IOReadBandwidthMax=600K
-IOWriteBandwidthMax=200K
+IOReadBandwidthMax=/home/ 600K
+IOWriteBandwidthMax=/home/ 200K
 
 [Install]
 # Start the container when the system boots
