@@ -52,6 +52,7 @@ https://svn.tug.org:8369 {
 	# Give a friendly error message for rate-limited requests
 	handle_errors 429 {
 		header Content-Type text/html
+		header -Cache-Control
 		respond `
 		<!DOCTYPE html>
 		<html lang="en">
