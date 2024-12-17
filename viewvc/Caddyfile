@@ -48,6 +48,7 @@
 
 	# Give a friendly error message for rate-limited requests
 	handle_errors 429 {
+		header Content-Type text/html
 		respond `
 		<!DOCTYPE html>
 		<html lang="en">
@@ -72,6 +73,12 @@
 	handle_path /viewvc-docroot/* {
 		file_server
 	}
+
+	# Politely ask the robots to go away
+	handle /robots.txt {
+		respond "User-agent: *\nDisallow: /"
+	}
+	header X-Robots-Tag none
 
 	# Reverse proxy to the ViewVC server
 	reverse_proxy :43219

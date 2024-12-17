@@ -29,10 +29,10 @@ Restart=always
 CPUAccounting=yes
 CPUQuota=200%
 
-# Limit the maximum I/O bandwidth to 100 kB/s
+# Limit the maximum I/O bandwidth to 25% of the server's capabilities
 IOAccounting=yes
-IOReadBandwidthMax=100k
-IOWriteBandwidthMax=100k
+IOReadBandwidthMax=600K
+IOWriteBandwidthMax=200K
 
 [Install]
 # Start the container when the system boots
