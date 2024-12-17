@@ -64,6 +64,16 @@ sudo setfacl -R -m u:101000:r /etc/dehydrated/certs/svn.tug.org/
 sudo setfacl -m u:101000:rx /etc/dehydrated/certs/svn.tug.org/
 ```
 
+### Weird “Access Denied” errors as `containers`
+
+If you get “Access Denied” errors when trying to access files in
+`~containers` while logged-in as `containers`, you might need to switch
+to the Podman user namespace:
+
+```console
+podman unshare /bin/bash
+```
+
 Files
 -----
 
