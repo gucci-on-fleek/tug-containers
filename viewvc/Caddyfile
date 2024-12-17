@@ -22,7 +22,7 @@
 # The web server
 https://svn.tug.org:8369 {
 	# TLS
-	tls /certificates/cert.pem /certificates/privkey.pem
+	tls /certificates/fullchain.pem /certificates/privkey.pem
 
 	# Save the access logs to a file
 	log {
