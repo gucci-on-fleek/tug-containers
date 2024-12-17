@@ -1,5 +1,8 @@
 # Global options
 {
+	# Handle the certificates ourselves
+	auto_https off
+
 	# Redirect the server logs to a file
 	log default {
 		output file /srv/data/caddy-log/main.log
@@ -14,13 +17,13 @@
 	# Allow cached responses to skip the rate limit
 	order rate_limit before header
 	order cache before rate_limit
-
-	# For the ACME certificate challenge
-	email acme-certificates@maxchernoff.ca
 }
 
 # The web server
 https://svn.tug.org:8369 {
+	# TLS
+	tls /certificates/cert.pem /certificates/privkey.pem
+
 	# Save the access logs to a file
 	log {
 		output file /srv/data/caddy-log/access.log

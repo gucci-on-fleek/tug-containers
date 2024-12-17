@@ -53,6 +53,17 @@ $ systemctl --user restart viewvc.service
 $ git add -A && git commit && git push
 ```
 
+### Let the container access the certificates
+
+```console
+sudo chmod a+X /etc/dehydrated/
+sudo chmod a+X /etc/dehydrated/certs/
+sudo chgrp -R containers /etc/dehydrated/certs/svn.tug.org/
+sudo chmod -R g+rX /etc/dehydrated/certs/svn.tug.org
+sudo setfacl -R -m u:101000:r /etc/dehydrated/certs/svn.tug.org/
+sudo setfacl -m u:101000:rx /etc/dehydrated/certs/svn.tug.org/
+```
+
 Files
 -----
 

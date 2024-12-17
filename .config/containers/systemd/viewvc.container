@@ -17,6 +17,7 @@ UserNS=nomap
 # Mount the data and SVN repositories
 Volume=%h/viewvc/:/srv/:rw,U
 Volume=/home/svn/:/mnt/:ro
+Volume=/etc/dehydrated/certs/svn.tug.org:/certificates:ro
 
 # Expose the web server's port
 PublishPort=8369:8369
@@ -30,9 +31,9 @@ CPUAccounting=yes
 CPUQuota=200%
 
 # Limit the maximum I/O bandwidth to 25% of the server's capabilities
-IOAccounting=yes
-IOReadBandwidthMax=/home/ 600K
-IOWriteBandwidthMax=/home/ 200K
+# IOAccounting=yes
+# IOReadBandwidthMax=/dev/md4 600K
+# IOWriteBandwidthMax=/dev/md4 200K
 
 [Install]
 # Start the container when the system boots
