@@ -33,9 +33,18 @@ https://svn.tug.org:8369 {
 	# Enable gzip and zstd compression
 	encode zstd gzip
 
-	# Cache the responses for 1 day
-	header Cache-Control max-age=86400 # 1 day
+	# Cache the responses
 	cache
+
+	# Set the cache durations
+	map {uri}               {cache_duration} {
+		~/viewvc-docroot/   7776000  # Static files, 90 days
+		~[?&](revision|pathrev|annotate|r1|r2)=  2592000  # Revision pages, 30 days
+		~[?&]log_pagestart=   86400  # Additional pages are expensive, 1 day
+		~[?&]view=log           900  # The first page of the log, 15 minutes
+		default               86400  # Anything else, 1 day
+	}
+	header Cache-Control max-age={cache_duration}
 
 	# Rate limit the requests to 10 per minute
 	rate_limit {
@@ -69,7 +78,7 @@ https://svn.tug.org:8369 {
 
 	# Just show a plain error message for other errors
 	handle_errors {
-		respond "{err.status_code} {err.status_text}"
+		respond {err.status_text} {err.status_code}
 	}
 
 	# Handle the ViewVC static files
@@ -80,7 +89,8 @@ https://svn.tug.org:8369 {
 
 	# Politely ask the robots to go away
 	handle /robots.txt {
-		respond "User-agent: *\nDisallow: /"
+		respond `User-agent: *
+Disallow: /`
 	}
 	header X-Robots-Tag none
 
