@@ -33,13 +33,15 @@ https://svn.tug.org:8369 {
 	# Enable gzip and zstd compression
 	encode zstd gzip
 
-	# Cache the responses
+	# Enable the server-side cache
 	cache
 
 	# Set the cache durations
 	map {uri}               {cache_duration} {
 		~/viewvc-docroot/   7776000  # Static files, 90 days
+		/favicon.ico        7776000  # (null) favicon, 90 days
 		~[?&](revision|pathrev|annotate|r1|r2)=  2592000  # Revision pages, 30 days
+		/robots.txt          604800  # Robots.txt, 1 week
 		~[?&]log_pagestart=   86400  # Additional pages are expensive, 1 day
 		~[?&]view=log           900  # The first page of the log, 15 minutes
 		default               86400  # Anything else, 1 day
@@ -90,9 +92,34 @@ https://svn.tug.org:8369 {
 	# Politely ask the robots to go away
 	handle /robots.txt {
 		respond `User-agent: *
-Disallow: /`
+Disallow: /
+
+User-agent: ia_archiver
+Allow: /
+Crawl-delay: 10`
 	}
-	header X-Robots-Tag none
+
+	@not-robots {
+		not path /robots.txt
+	}
+	header @not-robots X-Robots-Tag "index, nofollow"
+
+	# Security headers
+	header {
+		X-Content-Type-Options nosniff
+		Cross-Origin-Resource-Policy same-origin
+		Content-Security-Policy "default-src 'none'; frame-ancestors 'none'; form-action 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline';"
+		Strict-Transport-Security "max-age=1209600" # 2 weeks
+	}
+
+	# Some browsers are following the tug.org redirects incorrectly, so let's
+	# help them out by removing the /svn prefix for them
+	handle_path /svn/* {
+		redir /{uri} permanent
+	}
+
+	# No favicon
+	respond /favicon.ico 410
 
 	# Reverse proxy to the ViewVC server
 	reverse_proxy :43219
