@@ -22,7 +22,7 @@ Volume=/home/svn/:/mnt/:ro
 Volume=/etc/dehydrated/certs/svn.tug.org:/certificates:ro
 
 # Logging
-LogDriver=journald
+LogDriver=k8s-file
 
 [Service]
 # Restart the container if it fails
