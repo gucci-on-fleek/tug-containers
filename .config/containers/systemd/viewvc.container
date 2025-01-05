@@ -5,20 +5,24 @@ Image=maxchernoff.ca/viewvc:latest
 
 # Automatically update this container
 AutoUpdate=registry
+Pull=newer
 
 # Sandbox the container as much as possible
 DropCapability=all
 AddCapability=CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
 ReadOnly=true
-ReadOnlyTmpfs=false
+ReadOnlyTmpfs=true
 UserNS=keep-id:uid=1000,gid=1000
-Network=host
+Network=none
 
 # Mount the data and SVN repositories
 Volume=%h/viewvc/:/srv/:rw
 Volume=/home/svn/:/mnt/:ro
 Volume=/etc/dehydrated/certs/svn.tug.org:/certificates:ro
+
+# Logging
+LogDriver=journald
 
 [Service]
 # Restart the container if it fails
@@ -27,6 +31,10 @@ Restart=always
 # Limit the maximum CPU usage to 2 cores
 CPUAccounting=yes
 CPUQuota=200%
+
+[Unit]
+Requires=viewvc.socket
+After=viewvc.socket
 
 # Limit the maximum I/O bandwidth to 25% of the server's capabilities
 # IOAccounting=yes

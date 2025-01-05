@@ -1,0 +1,12 @@
+[Socket]
+Accept=no
+BindIPv6Only=both
+
+# fd/3, TCP :443
+ListenStream=8369
+
+# fdgram/4, UDP :443
+ListenDatagram=8369
+
+[Install]
+WantedBy=sockets.target
