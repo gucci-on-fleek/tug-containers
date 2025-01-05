@@ -27,21 +27,22 @@ LogDriver=journald
 [Service]
 # Restart the container if it fails
 Restart=always
+TimeoutStopSec=15
 
 # Limit the maximum CPU usage to 2 cores
 CPUAccounting=yes
 CPUQuota=200%
 
+# Limit the maximum I/O bandwidth to 25% of the server's capabilities
+IOAccounting=yes
+IOReadBandwidthMax=/dev/sda 600K
+IOReadBandwidthMax=/dev/sdb 600K
+IOWriteBandwidthMax=/dev/sda 200K
+IOWriteBandwidthMax=/dev/sdb 200K
+
 [Unit]
 Requires=viewvc.socket
 After=viewvc.socket
-
-# Limit the maximum I/O bandwidth to 25% of the server's capabilities
-# IOAccounting=yes
-# IOReadBandwidthMax=/dev/sda 600K
-# IOReadBandwidthMax=/dev/sdb 600K
-# IOWriteBandwidthMax=/dev/sda 200K
-# IOWriteBandwidthMax=/dev/sdb 200K
 
 [Install]
 # Start the container when the system boots

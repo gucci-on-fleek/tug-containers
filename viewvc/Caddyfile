@@ -18,6 +18,15 @@
 	# Allow cached responses to skip the rate limit
 	order rate_limit before header
 	order cache before rate_limit
+
+	# Aggressive timeouts
+	servers {
+		timeouts {
+			read_body   5s
+			read_header 5s
+			write       5s
+		}
+	}
 }
 
 # The web server
@@ -34,9 +43,20 @@ https://svn.tug.org:8369 {
 	tls /certificates/fullchain.pem /certificates/privkey.pem
 
 	# Save the access logs to a file
-	log {
-		output file /srv/data/caddy-log/access.log
+	log json {
+		output file /srv/data/caddy-log/access.log {
+			mode 640
+		}
 		format json
+	}
+
+	log apache {
+		output file /srv/data/caddy-log/error.log {
+			mode 640
+			roll_size 20MiB
+			roll_keep 0
+		}
+		format transform "{common_log}"
 	}
 
 	# Enable gzip and zstd compression
@@ -64,7 +84,7 @@ https://svn.tug.org:8369 {
 				not path /viewvc-docroot/*
 			}
 			key {remote_host}
-			events 10
+			events 8
 			window 60s
 		}
 	}
@@ -85,6 +105,25 @@ https://svn.tug.org:8369 {
 		and try again.
 		<p><a href="https://tug.org">Return to the main site.</a>
 		` 429
+	}
+
+	# Give a friendly error message if the server times out
+	handle_errors 504 {
+		header Content-Type text/html
+		header -Cache-Control
+		respond `
+		<!DOCTYPE html>
+		<html lang="en">
+		<meta charset="UTF-8">
+		<title>Request took too long</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" >
+		<meta name="color-scheme" content="light dark">
+		<h1>Request took too long</h1>
+		<p>Your request took too long to process. Either the server is
+		overloaded, or the page that you are trying to load is too large.
+		<p><a href="https://tug.org">Return to the main site.</a>
+		` 504
+		header Retry-After 10
 	}
 
 	# Just show a plain error message for other errors
@@ -131,5 +170,15 @@ Crawl-delay: 10`
 	respond /favicon.ico 410
 
 	# Reverse proxy to the ViewVC server
-	reverse_proxy :43219
+	reverse_proxy {
+		to :43219
+
+		transport http {
+			dial_timeout 1s
+			response_header_timeout 1s
+			read_timeout 1s
+			write_timeout 1s
+			max_conns_per_host 10
+		}
+	}
 }
