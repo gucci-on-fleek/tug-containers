@@ -2,10 +2,10 @@
 Accept=no
 BindIPv6Only=both
 
-# fd/3, TCP :443
+# fd/3, TCP :8369
 ListenStream=8369
 
-# fdgram/4, UDP :443
+# fdgram/4, UDP :8369
 ListenDatagram=8369
 
 [Install]

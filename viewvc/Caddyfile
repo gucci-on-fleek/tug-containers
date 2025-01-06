@@ -31,12 +31,15 @@
 
 # The web server
 https://svn.tug.org:8369 {
-	# socket activation
-	bind fd/3 {
+	# Socket activation
+	bind fd/3 { # TCP :8369
 		protocols h1 h2
 	}
-	bind fdgram/4 {
+	bind fdgram/4 { # UDP :8369
 		protocols h3
+	}
+	bind 127.0.83.69 { # Health checks
+		protocols h1
 	}
 
 	# TLS

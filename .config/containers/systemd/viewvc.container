@@ -5,7 +5,6 @@ Image=maxchernoff.ca/viewvc:latest
 
 # Automatically update this container
 AutoUpdate=registry
-Pull=newer
 
 # Sandbox the container as much as possible
 DropCapability=all
@@ -24,21 +23,29 @@ Volume=/etc/dehydrated/certs/svn.tug.org:/certificates:ro
 # Logging
 LogDriver=k8s-file
 
+# Healthchecks
+HealthCmd=curl --fail-with-body --silent --show-error 'http://127.0.83.69:8369/texlive/?view=log'
+HealthStartPeriod=30s
+HealthInterval=60s
+HealthRetries=5
+HealthTimeout=10s
+HealthOnFailure=kill
+
 [Service]
 # Restart the container if it fails
 Restart=always
-TimeoutStopSec=15
+TimeoutStopSec=5s
 
 # Limit the maximum CPU usage to 2 cores
 CPUAccounting=yes
 CPUQuota=200%
 
 # Limit the maximum I/O bandwidth to 25% of the server's capabilities
-IOAccounting=yes
-IOReadBandwidthMax=/dev/sda 600K
-IOReadBandwidthMax=/dev/sdb 600K
-IOWriteBandwidthMax=/dev/sda 200K
-IOWriteBandwidthMax=/dev/sdb 200K
+# IOAccounting=yes
+# IOReadBandwidthMax=/dev/sda 600K
+# IOReadBandwidthMax=/dev/sdb 600K
+# IOWriteBandwidthMax=/dev/sda 200K
+# IOWriteBandwidthMax=/dev/sdb 200K
 
 [Unit]
 Requires=viewvc.socket
