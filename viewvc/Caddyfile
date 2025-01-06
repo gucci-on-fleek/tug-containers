@@ -173,16 +173,85 @@ Crawl-delay: 10`
 	# No favicon
 	respond /favicon.ico 410
 
-	# Reverse proxy to the ViewVC server
-	reverse_proxy {
-		to :43219
+	# Block malicious requests
+	@bad-asns {
+		# Block the ASNs used by bots
+		maxmind_geolocation {
+			db_path "/usr/local/share/GeoIP/dbip-asn-lite.mmdb"
+			# Check the request logs for the top ASNs, then verify with
+			# https://radar.cloudflare.com/traffic/asNNNNNN#bot-vs-human
+			# https://bgp.he.net/ASNNNNNN
+			allow_asn \
+				45102 \ # Alibaba
+				37963 \ # Alibaba
+				13335 \ # Cloudflare
+				396982 \ # Google
+				136907 \ # Huawei
+				150436 \ # Bytedance
+				14061 \ # Digital Ocean
+				# 197540 \ # Netcup, but this is Max's server
+				32934 \ # Facebook
+				15169 \ # Google
+				64080 \ # Syn
+				# 4134 \ # China Telecom, human ISP
+				8075 \ # Microsoft
+				139659 \ # Lucida Cloud
+				49367 \ # Seflow
+				16509 \ # Amazon/AWS
+				34081 \ # Server24
+				# 4837 \ # China Unicom, human ISP
+				397423 \ # Tier.net
+				# 210906 \ # Bite Lietuva, human ISP
+				13332 \ # Hype Creation
+				# 3320 \ # Deutsche Telekom, human ISP
+				205544 \ # Lease Web
+				# 7545 \ # TPG Australia, human ISP
+				# 214996 \ # Netcup, but this is Max's server
+				# 4812 \ # China Telecom, human ISP
+				396356 \ # Latitude
+				8100 \ # QuadraNet
+				24940 \ # Hetzner
+				# 6327 \ # Shaw Canada, human ISP
+				30081 \ # Cache Fly
+		}
+		# Allow raw file downloads
+		not {
+			header_regexp User-Agent "^([Ww]get|[Cc]url)"
+			query view=co
+		}
+    }
 
-		transport http {
-			dial_timeout 2s
-			response_header_timeout 2s
-			read_timeout 2s
-			write_timeout 2s
-			max_conns_per_host 10
+	# Reverse proxy to the ViewVC server
+	route {
+		handle @bad-asns {
+			header Content-Type text/html
+			header -Cache-Control
+			respond `
+			<!DOCTYPE html>
+			<html lang="en">
+			<meta charset="UTF-8">
+			<title>IP address blocked</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" >
+			<meta name="color-scheme" content="light dark">
+			<h1>IP address blocked</h1>
+			<p>Users from your ISP/hosting provider have made excessive requests
+			to this server, so we unfortunately had to block you. If you believe
+			that this is an error, please contact us via email to the address
+			listed on the main site.
+			<p><a href="https://tug.org">Return to the main site.</a>
+			` 403
+		}
+
+		reverse_proxy {
+			to :43219
+
+			transport http {
+				dial_timeout 2s
+				response_header_timeout 2s
+				read_timeout 2s
+				write_timeout 2s
+				max_conns_per_host 10
+			}
 		}
 	}
 }
