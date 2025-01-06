@@ -5,8 +5,9 @@
 
 	# Redirect the server logs to a file
 	log default {
-		output file /srv/data/caddy-log/main.log
-		output stderr
+		output file /srv/data/caddy-log/main.log {
+			mode 640
+		}
 		format json
 	}
 

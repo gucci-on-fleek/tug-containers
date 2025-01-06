@@ -24,10 +24,10 @@ Volume=/etc/dehydrated/certs/svn.tug.org:/certificates:ro
 LogDriver=k8s-file
 
 # Healthchecks
-HealthCmd=curl --fail-with-body --silent --show-error 'http://127.0.83.69:8369/texlive/?view=log'
-HealthStartPeriod=30s
-HealthInterval=60s
-HealthRetries=5
+HealthCmd=curl --fail-with-body --silent --show-error --connect-to 'svn.tug.org:8369:127.0.83.69:8369' 'https://svn.tug.org:8369/texlive/?view=log'
+HealthStartPeriod=10s
+HealthInterval=30s
+HealthRetries=2
 HealthTimeout=10s
 HealthOnFailure=kill
 
