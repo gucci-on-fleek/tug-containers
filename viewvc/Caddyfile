@@ -88,7 +88,7 @@ https://svn.tug.org:8369 {
 				not path /viewvc-docroot/*
 			}
 			key {remote_host}
-			events 8
+			events 12
 			window 60s
 		}
 	}
@@ -235,9 +235,17 @@ Crawl-delay: 10`
 			<meta name="color-scheme" content="light dark">
 			<h1>IP address blocked</h1>
 			<p>Users from your ISP/hosting provider have made excessive requests
-			to this server, so we unfortunately had to block you. If you believe
-			that this is an error, please contact us via email to the address
-			listed on the main site.
+			to this server, so we unfortunately had to disable your access.
+
+			<p>If you're running a bot, then you are more than welcome to use
+			our data, but <em>not</em> our web interface. Instead, please
+			<a href="https://tug.org/texlive/svn/">clone the underlying
+			Subversion repository</a>, which has the exact same data and is
+			much more efficient to access.
+
+			<p>If you're a human, please contact us via email at <a
+			href="mailto:webmaster@tug.org"><code>webmaster@tug.org</code></a> and we'll happily whitelist you.
+
 			<p><a href="https://tug.org">Return to the main site.</a>
 			` 403
 		}
