@@ -216,6 +216,10 @@ Crawl-delay: 10`
 				30081 \ # Cache Fly
 				# Additional ASNs, sorted by date added
 				16276 \ # OVH
+				46844 \ # Sharktech
+				212238 \ # Datacamp
+				9009 \ # M247
+				133944 \ # Trafficforce
 		}
 		# Allow raw file downloads
 		not {
