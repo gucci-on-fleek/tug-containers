@@ -182,6 +182,7 @@ Crawl-delay: 10`
 			# https://radar.cloudflare.com/traffic/asNNNNNN#bot-vs-human
 			# https://bgp.he.net/ASNNNNNN
 			allow_asn \
+				# Original list, sorted by number of requests
 				45102 \ # Alibaba
 				37963 \ # Alibaba
 				13335 \ # Cloudflare
@@ -213,6 +214,8 @@ Crawl-delay: 10`
 				24940 \ # Hetzner
 				# 6327 \ # Shaw Canada, human ISP
 				30081 \ # Cache Fly
+				# Additional ASNs, sorted by date added
+				16276 \ # OVH
 		}
 		# Allow raw file downloads
 		not {
@@ -220,6 +223,9 @@ Crawl-delay: 10`
 			query view=co
 		}
     }
+
+	@news path *NEWS*
+	respond @news `Bots access this file too frequently, so access via the web interface is disabled. Please clone the repository instead.` 403
 
 	# Reverse proxy to the ViewVC server
 	route {
