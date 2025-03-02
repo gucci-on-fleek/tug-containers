@@ -190,7 +190,7 @@ Crawl-delay: 10`
 				136907 \ # Huawei
 				150436 \ # Bytedance
 				14061 \ # Digital Ocean
-				# 197540 \ # Netcup, but this is Max's server
+				197540 \ # Netcup
 				32934 \ # Facebook
 				15169 \ # Google
 				64080 \ # Syn
@@ -207,7 +207,7 @@ Crawl-delay: 10`
 				# 3320 \ # Deutsche Telekom, human ISP
 				205544 \ # Lease Web
 				# 7545 \ # TPG Australia, human ISP
-				# 214996 \ # Netcup, but this is Max's server
+				214996 \ # Netcup
 				# 4812 \ # China Telecom, human ISP
 				396356 \ # Latitude
 				8100 \ # QuadraNet
@@ -225,6 +225,10 @@ Crawl-delay: 10`
 		not {
 			header_regexp User-Agent "^([Ww]get|[Cc]url)"
 			query view=co
+		}
+		not {
+			# Allow anyone through who has the following cookie set
+			header Cookie *viewvc=imnotarobot*
 		}
     }
 
