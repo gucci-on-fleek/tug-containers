@@ -232,6 +232,13 @@ Crawl-delay: 10`
 		}
     }
 
+	# Unblocking URL
+	handle /unblock-me/mlDYeO-E4EmLoiHlTPwtRgX4aFc9cT0E {
+		header Set-Cookie "viewvc=imnotarobot; Path=/; Max-Age=31556926; SameSite=Strict"
+		respond `Ok, you've been unblocked.` 200
+	}
+
+	# Block the NEWS files unconditionally
 	@news path *NEWS*
 	respond @news `Bots access this file too frequently, so access via the web interface is disabled. Please clone the repository instead.` 403
 
