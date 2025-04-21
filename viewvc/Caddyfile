@@ -220,6 +220,7 @@ Crawl-delay: 10`
 				212238 \ # Datacamp
 				9009 \ # M247
 				133944 \ # Trafficforce
+				21859 \ # Zenlayer
 		}
 		# Allow raw file downloads
 		not {
