@@ -14,6 +14,10 @@
 	# Enable caching
 	cache {
 		otter
+		timeout {
+			backend 120s
+			cache 100ms
+		}
 	}
 
 	# Allow cached responses to skip the rate limit
@@ -86,9 +90,10 @@ https://svn.tug.org:8369 {
 		zone svn {
 			match {
 				not path /viewvc-docroot/*
+				not path /.within.website/*
 			}
 			key {remote_host}
-			events 12
+			events 20
 			window 60s
 		}
 	}
@@ -160,7 +165,7 @@ Crawl-delay: 10`
 	header {
 		X-Content-Type-Options nosniff
 		Cross-Origin-Resource-Policy same-origin
-		Content-Security-Policy "default-src 'none'; frame-ancestors 'none'; form-action 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline';"
+		Content-Security-Policy "default-src 'none'; frame-ancestors 'none'; form-action 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' blob:; font-src data:;"
 		Strict-Transport-Security "max-age=1209600" # 2 weeks
 	}
 
@@ -273,14 +278,17 @@ Crawl-delay: 10`
 		}
 
 		reverse_proxy {
-			to :43219
+			to localhost:8923
+
+			header_up X-Real-Ip {remote_host}
+			header_up X-Http-Version {http.request.proto}
 
 			transport http {
-				dial_timeout 10s
-				response_header_timeout 10s
-				read_timeout 10s
-				write_timeout 10s
-				max_conns_per_host 10
+				dial_timeout 30s
+				response_header_timeout 30s
+				read_timeout 30s
+				write_timeout 30s
+				max_conns_per_host 24
 			}
 		}
 	}
