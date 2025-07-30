@@ -21,6 +21,8 @@ LogDriver=k8s-file
 # Bind to a random port for testing
 PublishPort=127.0.0.1:14214:80
 
+Environment=APP_URL=http://localhost:14214
+
 [Service]
 # Restart the container if it fails
 Restart=on-failure
