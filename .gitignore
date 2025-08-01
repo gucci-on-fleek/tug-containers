@@ -6,5 +6,7 @@
 !/viewvc
 /viewvc/data
 !/lychee
+!/authelia
 !.gitignore
 !README.md
+secrets.conf

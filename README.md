@@ -115,3 +115,14 @@ the only interesting thing in `viewvc/data/`.
 This file configures systemd to automatically update and restart all the
 containers once per week. Max's server automatically rebuilds all the
 container images daily, and this pulls updates from there.
+
+
+Lychee
+------
+
+### Settings
+
+- `/settings/Users Management`
+    - “Allow users to change their username” → Off
+    - “Newly created user are allowed to upload content” → On
+    - “Allow user creation when oauth id does not exist” → On
