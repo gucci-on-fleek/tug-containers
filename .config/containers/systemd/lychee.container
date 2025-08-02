@@ -28,7 +28,7 @@ Environment=APP_URL=https://photos.tug.org
 Environment=AUTHELIA_CLIENT_ID=lychee
 Environment=AUTHELIA_BASE_URL=http://authelia.tug.org
 Environment=AUTHELIA_REDIRECT_URI=/auth/authelia/redirect
-Environment=TRUSTED_PROXIES=127.0.0.1
+Environment=TRUSTED_PROXIES=10.89.1.2
 Environment=APP_FORCE_HTTPS=true
 EnvironmentFile=%h/lychee/secrets.conf
 
