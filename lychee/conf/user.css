@@ -1,4 +1,4 @@
-#username, [for=username], #password, [for=password], [title=WebAuthn] {
+/* #username, [for=username], #password, [for=password], [title=WebAuthn] {
     display: none;
 }
 
@@ -6,4 +6,4 @@
     font-size: xxx-large;
     --fa: "Login" !important;
     font-family: inherit !important;
-}
+} */
