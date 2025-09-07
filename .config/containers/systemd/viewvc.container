@@ -16,7 +16,8 @@ UserNS=keep-id:uid=1000,gid=1000
 Network=none
 
 # Mount the data and SVN repositories
-Volume=%h/viewvc/:/srv/:rw
+Volume=%h/viewvc/:/srv/:ro
+Volume=%h/viewvc/data/:/srv/data:rw
 Volume=/home/svn/:/mnt/:ro
 Volume=/etc/dehydrated/certs/svn.tug.org:/certificates:ro
 
