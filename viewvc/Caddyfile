@@ -18,6 +18,7 @@
 			backend 120s
 			cache 100ms
 		}
+		max_cacheable_body_bytes 50000000 # 50 MB
 	}
 
 	# Allow cached responses to skip the rate limit
@@ -247,6 +248,11 @@ Crawl-delay: 10`
 	# Block the NEWS files unconditionally
 	@news path *NEWS*
 	respond @news `Bots access this file too frequently, so access via the web interface is disabled. Please clone the repository instead.` 403
+
+	# Secret speedtesting endpoint
+	handle /speedtest {
+		speedtest
+	}
 
 	# Reverse proxy to the ViewVC server
 	route {
