@@ -25,14 +25,14 @@
 	order rate_limit before header
 	order cache before rate_limit
 
-	# Aggressive timeouts
-	servers {
-		timeouts {
-			read_body   30s
-			read_header 30s
-			write       40s
-		}
-	}
+	# # Aggressive timeouts
+	# servers {
+	# 	timeouts {
+	# 		read_body   30s
+	# 		read_header 30s
+	# 		write       40s
+	# 	}
+	# }
 }
 
 # The web server

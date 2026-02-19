@@ -10,3 +10,4 @@
 !.gitignore
 !README.md
 secrets.conf
+viewvc/caddy-log-saved/
