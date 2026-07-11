@@ -41,12 +41,30 @@ TimeoutStopSec=5s
 CPUAccounting=yes
 CPUQuota=200%
 
+# Limit the I/O usage
+IOAccounting=yes
+
+# Limit the max IOPS to 33% of the server's capabilities
+IOReadIOPSMax=/dev/md2 100
+IOWriteIOPSMax=/dev/md2 100
+
+IOReadIOPSMax=/dev/md4 100
+IOWriteIOPSMax=/dev/md4 100
+
 # Limit the maximum I/O bandwidth to 25% of the server's capabilities
-# IOAccounting=yes
 # IOReadBandwidthMax=/dev/sda 600K
 # IOReadBandwidthMax=/dev/sdb 600K
 # IOWriteBandwidthMax=/dev/sda 200K
 # IOWriteBandwidthMax=/dev/sdb 200K
+
+# Lower the priorities
+CPUSchedulingPolicy=idle
+CPUWeight=1
+
+IOSchedulingClass=idle
+IOSchedulingPriority=7
+IOWeight=1
+Nice=10
 
 [Unit]
 Requires=viewvc.socket
