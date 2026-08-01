@@ -62,6 +62,23 @@ https://svn.tug.org:8369 {
 		alpn h2 h3
 	}
 
+	# Real browsers should also support zstd compression.
+	encode {
+		zstd fastest
+		minimum_length 1
+		match {
+			status 1xx 2xx 3xx 4xx 5xx
+		}
+	}
+	@not-zstd not header Accept-Encoding *zstd*
+	handle @not-zstd {
+		header Content-Type "text/plain; charset=utf-8"
+		respond 406 {
+			body "zstd compression is required."
+			close
+		}
+	}	
+
 	# Save the access logs to a file
 	log json {
 		output file /srv/data/caddy-log/access.log {
