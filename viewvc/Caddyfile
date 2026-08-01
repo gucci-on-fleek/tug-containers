@@ -33,13 +33,17 @@
 	# 		write       40s
 	# 	}
 	# }
+
+	servers {
+		protocols h2 h3
+	}
 }
 
 # The web server
 https://svn.tug.org:8369 {
 	# Socket activation
 	bind fd/3 { # TCP :8369
-		protocols h1 h2
+		protocols h2
 	}
 	bind fdgram/4 { # UDP :8369
 		protocols h3
@@ -49,7 +53,14 @@ https://svn.tug.org:8369 {
 	}
 
 	# TLS
-	tls /certificates/fullchain.pem /certificates/privkey.pem
+	tls /certificates/fullchain.pem /certificates/privkey.pem {
+		# Normally, we should just use the recommended/default TLS settings, but
+		# since nothing here is security-sensitive, we'll allow only a single
+		# algorithm so that bots that don't support it will fail to connect.
+		protocols tls1.3
+		curves x25519mlkem768
+		alpn h2 h3
+	}
 
 	# Save the access logs to a file
 	log json {
@@ -252,6 +263,18 @@ Crawl-delay: 10`
 	# Secret speedtesting endpoint
 	handle /speedtest {
 		speedtest
+	}
+
+	# Real browsers all support HTTP/2 and HTTP/3, but some bots only support
+	# HTTP/1.1. This is a simple way to block those bots.
+	@http1 protocol http/1.1
+	handle @http1 {
+		header Upgrade "HTTP/2.0"
+		header Content-Type "text/plain; charset=utf-8"
+		respond 426 {
+			body "HTTP/1.1 is not supported. Please use HTTP/2 or HTTP/3."
+			close
+		}
 	}
 
 	# Reverse proxy to the ViewVC server
