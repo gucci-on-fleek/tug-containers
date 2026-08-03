@@ -255,6 +255,8 @@ Crawl-delay: 10`
 				9009 \ # M247
 				133944 \ # Trafficforce
 				21859 \ # Zenlayer
+				55990 \ # Huawei Cloud Service
+				45090 \ # Tencent
 		}
 		# Allow raw file downloads
 		not {
@@ -293,6 +295,27 @@ Crawl-delay: 10`
 			close
 		}
 	}
+
+	# Block Chrome, since it's the source of >99% of requests
+	@block-chrome header_regexp User-Agent "Chrome/"
+	handle @block-chrome {
+                        header Content-Type text/html
+                        header -Cache-Control
+                        respond `
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <meta charset="UTF-8">
+                        <title>Chrome not allowed</title>
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+                        <meta name="color-scheme" content="light dark">
+                        <h1>Chrome not allowed</h1>
+                        <p>Sorry, but Chrome is the source of >99% of malicious requests to this server, so we've
+			unfortunately had to block it. Every single <em>other</em> browser is still permitted though.
+
+                        <p><a href="https://tug.org">Return to the main site.</a>
+                        ` 403
+                }
+
 
 	# Reverse proxy to the ViewVC server
 	route {
