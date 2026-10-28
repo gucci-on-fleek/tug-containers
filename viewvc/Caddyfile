@@ -73,6 +73,7 @@ https://svn.tug.org:8369 {
 	@not-zstd not header Accept-Encoding *zstd*
 	handle @not-zstd {
 		header Content-Type "text/plain; charset=utf-8"
+		header Cache-Control "no-store"
 		respond 406 {
 			body "zstd compression is required."
 			close
@@ -131,6 +132,7 @@ https://svn.tug.org:8369 {
 	handle_errors 429 {
 		header Content-Type text/html
 		header -Cache-Control
+		header Cache-Control "no-store"
 		respond `
 		<!DOCTYPE html>
 		<html lang="en">
@@ -149,6 +151,7 @@ https://svn.tug.org:8369 {
 	handle_errors 504 {
 		header Content-Type text/html
 		header -Cache-Control
+		header Cache-Control "no-store"
 		respond `
 		<!DOCTYPE html>
 		<html lang="en">
@@ -290,6 +293,7 @@ Crawl-delay: 10`
 	handle @http1 {
 		header Upgrade "HTTP/2.0"
 		header Content-Type "text/plain; charset=utf-8"
+		header Cache-Control "no-store"
 		respond 426 {
 			body "HTTP/1.1 is not supported. Please use HTTP/2 or HTTP/3."
 			close
@@ -301,6 +305,7 @@ Crawl-delay: 10`
 	handle @block-chrome {
                         header Content-Type text/html
                         header -Cache-Control
+			header Cache-Control "no-store"
                         respond `
                         <!DOCTYPE html>
                         <html lang="en">
@@ -322,6 +327,7 @@ Crawl-delay: 10`
 		handle @bad-asns {
 			header Content-Type text/html
 			header -Cache-Control
+			header Cache-Control "no-store"
 			respond `
 			<!DOCTYPE html>
 			<html lang="en">
